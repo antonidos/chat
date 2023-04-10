@@ -3,7 +3,52 @@
   padding: 0;
 }
 
+div {
+  font-size: 18px;
+}
+
+body {
+  color: #3C2525;
+}
+
 .app {
   height: 100vh;
   width: 100vw;
+  background-color: #371C1C;
+}
+
+header {
+  background-color: #582E2E;
+  padding: 0 15px;
+  height: 70px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 1100px;
+  margin: 0 auto;
+}
+
+.menu {
+  width: 300px;
+}
+
+.link {
+  text-decoration: none;
+  color: bisque;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.logo {
+  height: 50px;
+  width: 50px;
 }
