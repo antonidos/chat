@@ -1,3 +1,4 @@
+import PersonalInfo from 'entities/PersonalInfo';
 import React from 'react';
 import Header from 'widgets/Header';
 
@@ -6,7 +7,7 @@ const Personal = () => {
         <React.StrictMode>
             <div className="app">
                 <Header />
-                <Personal />
+                <PersonalInfo />
             </div>
         </React.StrictMode>
     );

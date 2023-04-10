@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Personal = () => {
+const PersonalInfo = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const Personal = () => {
     );
 };
 
-export default Personal;
+export default PersonalInfo;

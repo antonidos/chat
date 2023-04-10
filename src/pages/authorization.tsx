@@ -1,7 +1,8 @@
 import React from 'react';
 import Header from 'widgets/Header';
+import Auth from 'entities/Messenger';
 
-const Auth = () => {
+const Authorization = () => {
     return (
         <React.StrictMode>
             <div className="app">
@@ -12,4 +13,4 @@ const Auth = () => {
     );
 };
 
-export default Auth;
+export default Authorization;

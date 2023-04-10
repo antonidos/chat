@@ -17,7 +17,7 @@ const Header = () => {
                         </div>
                     </Link>
                     <Link
-                        href='/auth'
+                        href='/authorization'
                         className="link"
                     >
                         <div>
