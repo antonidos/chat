@@ -28,12 +28,12 @@ header {
 }
 
 .container {
-  width: 1100px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-.menu {
-  width: 300px;
+.menu a{
+  margin: 0 20px;
 }
 
 .link {
@@ -54,23 +54,23 @@ header {
   justify-content: space-between;
 }
 
-.logo {
-  height: 50px;
-  width: 50px;
+.auth {
+  width: 60%;
+  margin: 0 auto;
+  flex-direction: column;
 }
 
-.auth, .messenger {
+.auth, .messenger, .personal-info {
   border: 3px solid #683e3e;
   border-radius: 10px;
   margin-top: 20px;
   background-color: #b87373;
-  width: 100%;
   box-sizing: border-box;
   padding: 20px;
 }
 
-.auth {
-  flex-direction: column;
+.messenger, .personal-info {
+  width: 100%;
 }
 
 .auth input {
@@ -81,7 +81,7 @@ header {
   height: 30px;
   border: 2px solid rgb(93, 54, 54);
   border-radius: 5px;
-  width: 300px;
+  width: 50%;
 }
 
 .buttonLogin {
@@ -93,3 +93,13 @@ header {
   cursor: pointer;
 }
 
+.personal-info * {
+  margin: 7px 0;
+}
+
+.avatar {
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+  background-color: #fff;
+}
