@@ -6,6 +6,7 @@ const Auth = () => {
         <React.StrictMode>
             <div className="app">
                 <Header />
+                <Auth />
             </div>
         </React.StrictMode>
     );

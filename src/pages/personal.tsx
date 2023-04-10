@@ -6,6 +6,7 @@ const Personal = () => {
         <React.StrictMode>
             <div className="app">
                 <Header />
+                <Personal />
             </div>
         </React.StrictMode>
     );
