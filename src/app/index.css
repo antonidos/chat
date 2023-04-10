@@ -1,7 +1,9 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: 'Comic Neue', cursive;
 }
+
 
 div {
   font-size: 18px;
@@ -41,6 +43,10 @@ header {
 
 .flex {
   display: flex;
+  align-items: baseline;
+}
+
+.align-center {
   align-items: center;
 }
 
@@ -52,3 +58,36 @@ header {
   height: 50px;
   width: 50px;
 }
+
+.auth {
+  border: 3px solid #683e3e;
+  border-radius: 10px;
+  margin-top: 20px;
+  background-color: #b87373;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.auth input {
+  margin: 10px 0;
+}
+
+.inputlogin {
+  height: 30px;
+  border: 2px solid rgb(93, 54, 54);
+  border-radius: 5px;
+  width: 300px;
+}
+
+.buttonLogin {
+  color: bisque;
+  border-radius: 20px;
+  background-color: #451c1c;
+  height: 40px;
+  width: 200px;
+  font-size: 22px;
+  cursor: pointer;
+}
+

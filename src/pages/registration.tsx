@@ -1,13 +1,13 @@
 import React from 'react';
 import Header from 'widgets/Header';
-import Auth from 'entities/Auth';
+import Register from 'entities/Register';
 
 const Authorization = () => {
     return (
         <React.StrictMode>
             <div className="app">
                 <Header />
-                <Auth />
+                <Register />
             </div>
         </React.StrictMode>
     );

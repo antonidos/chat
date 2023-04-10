@@ -5,7 +5,7 @@ import Link from 'next/link'
 const Header = () => {
     return (
         <header>
-            <div className="container flex space-between">
+            <div className="container flex align-center space-between">
                 <Logo />
                 <div className="menu flex space-between">
                     <Link
@@ -24,8 +24,6 @@ const Header = () => {
                             Авторизация
                         </div>
                     </Link>
-
-
                 </div>
             </div>
         </header>
