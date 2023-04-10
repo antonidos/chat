@@ -11,6 +11,7 @@ const Auth = () => {
                 <h3>Введите пароль</h3>
                 <input className='inputlogin'></input>
                 <Link href='/'><button className='buttonLogin'>Войти</button></Link>
+                <p>Нет аккаунта? <Link className='link' href='/registration'>зарегистрироваться</Link></p>
             </div>
         </div>
     );

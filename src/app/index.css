@@ -59,15 +59,18 @@ header {
   width: 50px;
 }
 
-.auth {
+.auth, .messenger {
   border: 3px solid #683e3e;
   border-radius: 10px;
   margin-top: 20px;
   background-color: #b87373;
   width: 100%;
-  flex-direction: column;
   box-sizing: border-box;
   padding: 20px;
+}
+
+.auth {
+  flex-direction: column;
 }
 
 .auth input {
@@ -85,8 +88,7 @@ header {
   color: bisque;
   border-radius: 20px;
   background-color: #451c1c;
-  height: 40px;
-  width: 200px;
+  padding: 10px 20px;
   font-size: 22px;
   cursor: pointer;
 }
