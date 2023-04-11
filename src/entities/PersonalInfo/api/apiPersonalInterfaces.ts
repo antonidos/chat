@@ -1,3 +1,3 @@
 export interface IUpdateInfoProps {
-    (age: number, email: string, phone: string, token: string): Promise<boolean>;
+    (age: number | null, email: string | null, phone: string | null, token: string | null): Promise<boolean>;
 }

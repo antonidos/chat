@@ -11,9 +11,9 @@ const Auth = () => {
     const dispatch = useDispatch()
     const router = useRouter()
 
-    const handleCnahge = ({ target: { value, id } }: ChangeEvent<HTMLInputElement>) => {
-        if (id === 'username') setUsername(value)
-        if (id === 'password') setPassword(value)
+    const handleCnahge = ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
+        if (name === 'username') setUsername(value)
+        if (name === 'password') setPassword(value)
     }
 
     const handleSubmit = async (e: MouseEvent) => {
@@ -49,9 +49,9 @@ const Auth = () => {
             <div className="auth flex align-center">
                 <h1>Авторизация</h1>
                 <h3>Введите логин</h3>
-                <input id='username' onChange={handleCnahge} className='inputlogin'></input>
+                <input name='username' onChange={handleCnahge} className='inputlogin'></input>
                 <h3>Введите пароль</h3>
-                <input id='password' onChange={handleCnahge} className='inputlogin'></input>
+                <input name='password' onChange={handleCnahge} className='inputlogin'></input>
                 <button disabled={!username || !password} onClick={handleSubmit} className='buttonLogin'>Войти</button>
                 <p>Нет аккаунта? <Link className='link' href='/registration'>зарегистрироваться</Link></p>
             </div>

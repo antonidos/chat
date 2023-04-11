@@ -9,6 +9,7 @@ export const getUserInfo = async (token:string) => {
 
 export const updateUserInfo: IUpdateInfoProps = async (age, email, phone, token) => {
     const updateUserInfo = await instance.post('/users/update_user_info', { age, email, phone, token })
-    if (updateUserInfo.data?.data?.data) return true
-    else return false;
+    if (updateUserInfo.data?.data?.data) return true;
+    if (updateUserInfo.data.data.info) alert(updateUserInfo.data.data.info)
+    return false;
 }

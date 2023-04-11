@@ -28,7 +28,7 @@ header {
   margin: 0 auto;
 }
 
-.menu a{
+.menu a {
   margin: 0 20px;
 }
 
@@ -61,7 +61,8 @@ header {
   flex-direction: column;
 }
 
-.auth, .personal-info {
+.auth,
+.personal-info {
   border: 3px solid #683e3e;
   border-radius: 10px;
   margin-top: 20px;
@@ -70,7 +71,8 @@ header {
   padding: 20px;
 }
 
-.messenger, .personal-info {
+.messenger,
+.personal-info {
   width: 100%;
 }
 
@@ -84,6 +86,7 @@ header {
 }
 
 .inputlogin {
+  padding: 2px 7px;
   height: 30px;
   border: 2px solid rgb(93, 54, 54);
   border-radius: 5px;
@@ -101,6 +104,7 @@ header {
 }
 
 .buttonLogin:disabled {
+  cursor: not-allowed;
   color: rgb(69, 68, 68);
   background-color: grey;
 }
@@ -122,7 +126,7 @@ header {
 }
 
 .list-of-dialogs {
-  width: 30%;
+  width: 45%;
   height: 100%;
   margin-right: 10px;
   overflow-y: scroll;
@@ -142,7 +146,7 @@ header {
 }
 
 .last-message {
-  color:rgb(59, 54, 46)
+  color: rgb(59, 54, 46)
 }
 
 .dialog {
@@ -150,7 +154,8 @@ header {
   padding-left: 15px;
   border: 2px solid rgb(140, 87, 87);
   border-radius: 15px 0 0 15px;
-  background-color: #E9AAAA;;
+  background-color: #E9AAAA;
+  ;
   margin: 7px 0;
   cursor: pointer;
 }
@@ -177,7 +182,8 @@ header {
 
 .current-companion {
   padding: 10px 0;
-} 
+  color: #371C1C;
+}
 
 .messages-area {
   border-top: 2px solid rgb(140, 87, 87);
@@ -193,7 +199,7 @@ header {
 }
 
 .write-message {
-  box-sizing:border-box;
+  box-sizing: border-box;
   border-top: 2px solid rgb(140, 87, 87);
   padding: 10px;
   width: 100%;
@@ -227,4 +233,56 @@ header {
 .from-companion {
   margin-left: 10px;
   align-self: start;
+}
+
+.background-modal {
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: grey;
+  opacity: 50%;
+}
+
+.background-modal,
+.modal {
+  position: absolute;
+  display: none;
+}
+
+.open {
+  display: flex;
+}
+
+.modal {
+  flex-direction: column;
+  z-index: 10;
+  -webkit-box-shadow: 14px 15px 31px -1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 14px 15px 31px -1px rgba(0, 0, 0, 0.75);
+  box-shadow: 14px 15px 31px -1px rgba(0, 0, 0, 0.75);
+  top: 50vh;
+  left: 50vw;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  border-radius: 20px;
+  border: 1px solid black;
+  padding: 20px 30px;
+}
+
+.modal h3{
+  margin-bottom: 10px;
+}
+
+.modal button{
+  margin-top: 10px;
+}
+
+.modal p{
+  align-self: start;
+}
+
+.modal input{
+  width: 100%;
+  margin-bottom: 10px;
 }
