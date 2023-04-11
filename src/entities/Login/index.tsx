@@ -21,19 +21,22 @@ const Auth = () => {
         console.log(isDisabled)
         
         if (!isDisabled) {
-            await login(username, password)
+            const response = await login(username, password)
             // dispatch(setPersonalInfo((await getUserInfo(localStorage.getItem('userToken'))) || false))
-            dispatch(setIsLoggedIn(true))
-            router.push('/')
+            if(response) {
+                dispatch(setIsLoggedIn(true))
+                router.push('/')
+            }
         } else e.preventDefault();
     }
 
     async function getData() {
         if (localStorage.getItem('userToken')) {
             alert("Вы уже авторизованы")
+            dispatch(setIsLoggedIn(true))
             router.push('/')
         } else {
-            dispatch(setIsLoggedIn(true))
+            dispatch(setIsLoggedIn(false))
         }
     }
 

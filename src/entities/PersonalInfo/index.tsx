@@ -30,8 +30,8 @@ const PersonalInfo = () => {
                     </div>
                     <h3>Имя: {user?.username}</h3>
                     <h3>Электронная почта: {user?.email}</h3>
-                    <h3>Возраст: {21}</h3>
-                    <h3>Номер телефона: {"89999999999"}</h3>
+                    <h3>Возраст: {user?.age || "Не указано"}</h3>
+                    <h3>Номер телефона: {user?.phone || "Не указано"}</h3>
                     <button className="buttonLogin">
                         Редактировать
                     </button>

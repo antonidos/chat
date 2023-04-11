@@ -12,17 +12,18 @@ const Header = () => {
     const router = useRouter()
 
     const handleClick = async () => {
-        if(localStorage.getItem('userToken')) {
+        if (localStorage.getItem('userToken')) {
             await logout(localStorage.getItem('userToken') as string)
+            localStorage.setItem('userToken', '')
         }
         dispatch(setIsLoggedIn(false))
         router.push("/login")
     }
 
-
     async function getData() {
         if (!localStorage.getItem('userToken')) {
-            router.push('/login')
+            if(router.pathname !== '/registration') router.push('/login')
+            dispatch(setIsLoggedIn(false))
         } else {
             dispatch(setIsLoggedIn(true))
         }

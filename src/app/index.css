@@ -9,10 +9,6 @@ div {
   font-size: 18px;
 }
 
-body {
-  color: #3C2525;
-}
-
 .app {
   height: 100vh;
   width: 100vw;
@@ -65,11 +61,11 @@ header {
   flex-direction: column;
 }
 
-.auth, .messenger, .personal-info {
+.auth, .personal-info {
   border: 3px solid #683e3e;
   border-radius: 10px;
   margin-top: 20px;
-  background-color: #b87373;
+  background-color: #E9AAAA;
   box-sizing: border-box;
   padding: 20px;
 }
@@ -80,7 +76,7 @@ header {
 
 .messenger {
   padding: 0;
-  height: 100%;
+  height: 80vh;
 }
 
 .auth input {
@@ -127,6 +123,22 @@ header {
 
 .list-of-dialogs {
   width: 30%;
+  height: 100%;
+  margin-right: 10px;
+  overflow-y: scroll;
+}
+
+.dialogs {
+  margin-top: 90px;
+}
+
+.list-of-dialogs h2 {
+  background-color: #371C1C;
+  padding: 10px;
+  border-radius: 20px;
+  position: absolute;
+  margin: 20px 0 15px 15px;
+  color: #E9AAAA;
 }
 
 .last-message {
@@ -136,23 +148,27 @@ header {
 .dialog {
   padding: 5px;
   padding-left: 15px;
-  border-bottom: 1px solid black;
+  border: 2px solid rgb(140, 87, 87);
+  border-radius: 15px 0 0 15px;
+  background-color: #E9AAAA;;
+  margin: 7px 0;
   cursor: pointer;
 }
+
 .dialog:hover {
   transition: 0.4s;
   background-color: #a65e5e;
 }
-/* 
-.dialog:last-child {
-  border-bottom: 0;
-} */
 
 .current-dialog {
+  margin-top: 20px;
+  padding: 0;
+  height: 80vh;
+  background-color: #E9AAAA;
+  border-radius: 0 15px 15px 0;
   flex-direction: column;
   width: 100%;
   border-left: 2px solid rgb(140, 87, 87);
-  height: 500px;
 }
 
 .jcc {
@@ -169,6 +185,11 @@ header {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
 
 .write-message {
@@ -194,7 +215,6 @@ header {
   padding: 5px;
   border: 2px solid rgb(140, 87, 87);
   border-radius: 5px;
-  height: auto;
   margin: 5px 0;
   word-wrap: break-word;
 }

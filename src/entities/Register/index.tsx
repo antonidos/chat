@@ -9,13 +9,13 @@ const Register = () => {
     const router = useRouter()
 
     useEffect(() => {
-        console.log('hello')
         async function getData() {
             if (localStorage.getItem('userToken')) {
                 alert("Вы уже авторизованы")
+                dispatch(setIsLoggedIn(true))
                 router.push('/')
             } else {
-                dispatch(setIsLoggedIn(true))
+                dispatch(setIsLoggedIn(false))
             }
         }
 
