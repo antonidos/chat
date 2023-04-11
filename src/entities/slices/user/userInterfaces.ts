@@ -1,13 +1,12 @@
 export interface IPersonalInfo {
     age?: number,
     phone?: string,
-    name: string,
+    username: string,
     email: string
 }
 
 export interface IUserState {
     isLoggedIn: boolean,
-    userToken: string | null,
     personalInfo: IPersonalInfo | null,
     userChats: string[]
 }

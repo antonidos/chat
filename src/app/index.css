@@ -37,6 +37,7 @@ header {
 }
 
 .link {
+  cursor: pointer;
   text-decoration: none;
   color: bisque;
 }
@@ -101,6 +102,11 @@ header {
   font-size: 22px;
   cursor: pointer;
   transition: 0.4s;
+}
+
+.buttonLogin:disabled {
+  color: rgb(69, 68, 68);
+  background-color: grey;
 }
 
 /* TBA */

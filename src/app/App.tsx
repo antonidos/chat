@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { store } from 'entities/store';
 
 const App: FC<PropsWithChildren> = (props) => {
+
     return (
         <React.StrictMode>
             <Provider store={store}>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Messenger = () => {
+     
     return (
         <div className='container'>
             <div className="messenger flex align-start">
@@ -28,7 +29,7 @@ const Messenger = () => {
                         <div className="message from-you">fdgdfgfd</div>
                         <div className="message from-you">fdgdfgfdfdgdfgfdfdgdfgfdfdgdfgfdfdgdfgfdfdgdfgfd</div>
                         <div className="message from-companion">fdgdfgfd</div>
-                    
+
                     </div>
                     <div className="write-message flex jcc align-center">
                         <textarea className="inputlogin" />

@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { setIsLoggedIn } from 'entities/slices/user/userSlice';
 
 const Register = () => {
+    const dispatch = useDispatch()
+    const router = useRouter()
+
+    useEffect(() => {
+        console.log('hello')
+        async function getData() {
+            if (localStorage.getItem('userToken')) {
+                alert("Вы уже авторизованы")
+                router.push('/')
+            } else {
+                dispatch(setIsLoggedIn(true))
+            }
+        }
+
+        getData()
+    }, [])
+
     return (
         <div className="container">
             <div className="auth flex align-center">

@@ -1,5 +1,5 @@
 import React from 'react';
-import Auth from 'entities/Auth';
+import Auth from 'entities/Login';
 import App from 'app/App';
 
 const Authorization = () => {

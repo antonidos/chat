@@ -5,9 +5,8 @@ import { IRootState, IUserState } from "./userInterfaces";
 
 const initialState: IUserState = {
     isLoggedIn: false,
-    userToken: null,
     personalInfo: {
-        name: "Антон",
+        username: "Антон",
         email: "blabla@mail.ru"
     },
     userChats: []
@@ -19,9 +18,6 @@ const userSlice = createSlice({
     reducers: {
         setIsLoggedIn: (state, action) => {
             state.isLoggedIn = action.payload;
-        },
-        setUserToken: (state, action) => {
-            state.userToken = action.payload;
         },
         setPersonalInfo: (state, action) => {
             state.personalInfo = action.payload;
@@ -35,7 +31,7 @@ const userSlice = createSlice({
     }
 })
 
-export const { setIsLoggedIn, setPersonalInfo, addChat, setChatsOfUser, setUserToken } = userSlice.actions;
+export const { setIsLoggedIn, setPersonalInfo, addChat, setChatsOfUser } = userSlice.actions;
 
 export const selectUser = (state:IRootState) => state.user;
 
