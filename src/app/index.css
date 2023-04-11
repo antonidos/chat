@@ -100,7 +100,13 @@ header {
   padding: 10px 20px;
   font-size: 22px;
   cursor: pointer;
+  transition: 0.4s;
 }
+
+/* TBA */
+/* .buttonLogin:hover {
+  background-color: #824949;
+} */
 
 .personal-info * {
   margin: 7px 0;
@@ -175,4 +181,24 @@ header {
 .write-message button {
   font-size: 18px;
   padding: 6px 20px;
+}
+
+.message {
+  max-width: 55%;
+  padding: 5px;
+  border: 2px solid rgb(140, 87, 87);
+  border-radius: 5px;
+  height: auto;
+  margin: 5px 0;
+  word-wrap: break-word;
+}
+
+.from-you {
+  align-self: end;
+  margin-right: 10px;
+}
+
+.from-companion {
+  margin-left: 10px;
+  align-self: start;
 }

@@ -25,18 +25,9 @@ const Messenger = () => {
                 <div className="current-dialog flex align-center">
                     <h2 className='current-companion'>Диалог с: {"Игорь"}</h2>
                     <div className="messages-area flex align-center">
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
-                        <div className="message">fdgdfgfd</div>
+                        <div className="message from-you">fdgdfgfd</div>
+                        <div className="message from-you">fdgdfgfdfdgdfgfdfdgdfgfdfdgdfgfdfdgdfgfdfdgdfgfd</div>
+                        <div className="message from-companion">fdgdfgfd</div>
                     
                     </div>
                     <div className="write-message flex jcc align-center">
