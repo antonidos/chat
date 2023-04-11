@@ -1,15 +1,12 @@
+import App from 'app/App';
 import PersonalInfo from 'entities/PersonalInfo';
 import React from 'react';
-import Header from 'widgets/Header';
 
 const Personal = () => {
     return (
-        <React.StrictMode>
-            <div className="app">
-                <Header />
-                <PersonalInfo />
-            </div>
-        </React.StrictMode>
+        <App>
+            <PersonalInfo />
+        </App>
     );
 };
 
