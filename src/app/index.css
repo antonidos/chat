@@ -155,7 +155,8 @@ header {
   border: 2px solid rgb(140, 87, 87);
   border-radius: 15px 0 0 15px;
   background-color: #E9AAAA;
-  ;
+  display: flex;
+  justify-content: space-between;
   margin: 7px 0;
   cursor: pointer;
 }
@@ -165,7 +166,7 @@ header {
   background-color: #a65e5e;
 }
 
-.current-dialog {
+#current-dialog {
   margin-top: 20px;
   padding: 0;
   height: 80vh;
@@ -223,6 +224,8 @@ header {
   border-radius: 5px;
   margin: 5px 0;
   word-wrap: break-word;
+  vertical-align: middle;
+  display: flex;
 }
 
 .from-you {
@@ -285,4 +288,110 @@ header {
 .modal input{
   width: 100%;
   margin-bottom: 10px;
+}
+
+.searchInput {
+  height: 35px;
+  border-radius: 10px;
+  margin: 0 10px 10px 0;
+  padding: 0 20px;
+  font-size: 17px;
+}
+
+.result {
+  position: absolute;
+  top: 49px;
+  border-radius: 7px;
+  width: 90%;
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchContainer {
+  position: relative;
+}
+
+.user {
+  margin: 3px;
+  border: 0;
+  border-radius: 5px;
+  padding: 10px 15px;
+  transition: 0.4s;
+  cursor: pointer;
+  text-align: left;
+  font-size: 15px;
+}
+
+.user:hover {
+  background-color: darkgray;
+}
+
+.ldsRing {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  justify-self: center;
+  align-self: center;
+}
+
+.ldsRing div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #000 transparent transparent transparent;
+}
+
+.ldsRing div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.ldsRing div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.ldsRing div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+  0% {
+      transform: rotate(0deg);
+  }
+
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+.delete {
+  padding: 5px 10px 0 10px;
+  font-size: 20px;
+  z-index: 15;
+  transition: 0.5s;
+  border-radius: 5px;
+}
+
+.delete:hover {
+  background-color: #582E2E;
+  color: red
+}
+
+.time {
+  padding-top: 3px;
+  min-width: 50px;
+  text-align: right;  
+  font-size: 15px;
+  flex-grow: 1;
+  vertical-align: middle;
 }

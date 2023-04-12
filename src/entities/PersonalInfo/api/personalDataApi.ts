@@ -3,8 +3,10 @@ import { IUpdateInfoProps } from "./apiPersonalInterfaces"
 
 export const getUserInfo = async (token:string) => {
     const getUserInfo = await instance.get(`/users/get_user_data/${token}`)
+    
     if (getUserInfo.data?.data?.data) return getUserInfo.data.data.data
-    else return false
+    if (getUserInfo.data.data.info) alert(getUserInfo.data.data.info)
+    return false
 }
 
 export const updateUserInfo: IUpdateInfoProps = async (age, email, phone, token) => {

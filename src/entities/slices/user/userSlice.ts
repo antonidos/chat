@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IRootState, IUserState } from "./userInterfaces";
+import { IRootState, IUserState } from "../reduxInterfaces";
 
 
 
 const initialState: IUserState = {
     isLoggedIn: false,
     personalInfo: {
-        username: "Антон",
-        email: "blabla@mail.ru"
+        username: "",
+        email: "",
+        id: null
     },
-    userChats: []
+    userChats: [],
 }
 
 const userSlice = createSlice({

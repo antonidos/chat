@@ -51,7 +51,7 @@ const Auth = () => {
                 <h3>Введите логин</h3>
                 <input name='username' onChange={handleCnahge} className='inputlogin'></input>
                 <h3>Введите пароль</h3>
-                <input name='password' onChange={handleCnahge} className='inputlogin'></input>
+                <input type='password' name='password' onChange={handleCnahge} className='inputlogin'></input>
                 <button disabled={!username || !password} onClick={handleSubmit} className='buttonLogin'>Войти</button>
                 <p>Нет аккаунта? <Link className='link' href='/registration'>зарегистрироваться</Link></p>
             </div>

@@ -42,8 +42,10 @@ const PersonalInfo = () => {
 
     useEffect(() => {
         async function getData() {
-            if (localStorage.getItem('userToken'))
-                dispatch(setPersonalInfo(await getUserInfo(localStorage.getItem('userToken') as string)))
+            if (localStorage.getItem('userToken')){
+                dispatch(setPersonalInfo(await getUserInfo(localStorage.getItem('userToken') as string)));
+                console.log(user);
+            }  
             else {
                 router.push('/login')
             }

@@ -57,7 +57,7 @@ const Register = () => {
                 <h3>Введите логин</h3>
                 <input name='username' onChange={handleChange} className='inputlogin'></input>
                 <h3>Введите пароль</h3>
-                <input name='password' onChange={handleChange} className='inputlogin'></input>
+                <input type='password' name='password' onChange={handleChange} className='inputlogin'></input>
                 <button
                 onClick={handleSubmit}
                     disabled={!(state.email && state.password && state.username)}

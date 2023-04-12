@@ -2,7 +2,8 @@ export interface IPersonalInfo {
     age?: number,
     phone?: string,
     username: string,
-    email: string
+    email: string,
+    id: number | null
 }
 
 export interface IUserState {
@@ -11,6 +12,17 @@ export interface IUserState {
     userChats: string[]
 }
 
+export interface ISearchValue {
+    username: string,
+    id: number
+}
+
+export interface ISearchState {
+    value: ISearchValue[] | null,
+    status: string
+}
+
 export interface IRootState {
     user: IUserState;
+    search: ISearchState
 }
