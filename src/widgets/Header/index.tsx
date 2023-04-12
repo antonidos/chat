@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setIsLoggedIn } from 'entities/slices/user/userSlice';
 import { useRouter } from 'next/router';
 import { logout } from './api/apiLogout';
+import Image from 'next/image';
 
 const Header = () => {
     const isLoggedIn = useSelector(selectUser).isLoggedIn
@@ -22,7 +23,7 @@ const Header = () => {
 
     async function getData() {
         if (!localStorage.getItem('userToken')) {
-            if(router.pathname !== '/registration') router.push('/login')
+            if (router.pathname !== '/registration') router.push('/login')
             dispatch(setIsLoggedIn(false))
         } else {
             dispatch(setIsLoggedIn(true))
@@ -37,7 +38,14 @@ const Header = () => {
         <header>
             <div className="container flex align-center space-between">
                 <Logo />
-                <div className="menu flex space-between">
+                <div className="menu flex space-between align-center">
+                    <Image
+                        className='theme'
+                        src='/images/sleep-mode.png'
+                        alt='night mode'
+                        width={30}
+                        height={30}
+                    />
                     {isLoggedIn ?
                         <>
                             <Link
