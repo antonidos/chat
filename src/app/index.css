@@ -87,9 +87,6 @@ h1 {
 
 .result {
   width: 90%;
-  min-height: 100px;
-  max-height: 300px;
-  overflow-y: auto;
 }
 
 .ldsRing {

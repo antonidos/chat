@@ -4,6 +4,7 @@ import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { login } from './api/apiLogin';
 import { useDispatch } from 'react-redux';
 import { setIsLoggedIn } from 'entities/slices/user/userSlice';
+import { getUserInfo } from 'entities/PersonalInfo/api/personalDataApi';
 
 const Auth = () => {
     const [username, setUsername] = useState("")
@@ -30,17 +31,19 @@ const Auth = () => {
         } else e.preventDefault();
     }
 
-    async function getData() {
-        if (localStorage.getItem('userToken')) {
-            alert("Вы уже авторизованы")
-            dispatch(setIsLoggedIn(true))
-            router.push('/')
-        } else {
-            dispatch(setIsLoggedIn(false))
-        }
-    }
-
     useEffect(() => {
+        async function getData() {
+            if (localStorage.getItem('userToken')) {
+                if (await getUserInfo(localStorage.getItem('userToken') as string)) {
+                    alert("Вы уже авторизованы")
+                    dispatch(setIsLoggedIn(true))
+                    router.push('/')
+                }
+            } else {
+                dispatch(setIsLoggedIn(false))
+            }
+        }
+
         getData()
     }, [])
 

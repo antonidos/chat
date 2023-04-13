@@ -71,9 +71,10 @@ const MainChat: FC<MainChatProps> = (props) => {
                             )
                         )}
                     </div>
-                    <div className="write-message box-border border-t-2 border-border p-2.5 w-full flex justify-center items-center dark:border-slate-700">
-                        <textarea value={value} onChange={handleChange} className="inputlogin mr-5 h-12 p-1 dark:bg-orange-200 dark:text-slate-800" />
-                        <button onClick={sendMessage} className="buttonLogin text-md py-1 px-5">Отправить</button>
+                    <div className="write-message box-border border-t-2 border-border py-2.5 px-5 w-full flex justify-center items-center dark:border-slate-700">
+                        <textarea value={value} onChange={handleChange} 
+                            className="inputlogin mr-5 h-12 p-1 dark:bg-orange-200 dark:text-slate-800 w-full" />
+                        <button onClick={sendMessage} className="buttonLogin text-md py-1 px-5 bg-primary dark:bg-slate-900">Отправить</button>
                     </div>
                 </>
             ) : (

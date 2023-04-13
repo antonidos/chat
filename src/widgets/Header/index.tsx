@@ -6,6 +6,8 @@ import { selectUser, setIsLoggedIn } from 'entities/slices/user/userSlice';
 import { useRouter } from 'next/router';
 import { logout } from './api/apiLogout';
 import Image from 'next/image';
+import { getSettings, setSettings, setTheme } from './api/apiSettings';
+import { getUserInfo } from 'entities/PersonalInfo/api/personalDataApi';
 
 const Header = () => {
     const isLoggedIn = useSelector(selectUser).isLoggedIn
@@ -21,16 +23,48 @@ const Header = () => {
         router.push("/login")
     }
 
-    const toggleDark = () => {
+    const toggleDark = async () => {
         document.documentElement.classList.toggle('dark')
+        if (localStorage.getItem('userToken')) {
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'DARK')
+                await setTheme(localStorage.getItem('userToken') as string, 'DARK')
+            }
+            else {
+                localStorage.setItem('theme', 'LIGHT')
+                await setTheme(localStorage.getItem('userToken') as string, 'LIGHT')
+            }
+        }
+    }
+
+    function getTheme() {
+        const theme = localStorage.getItem('theme');
+        if (theme === "LIGHT") document.documentElement.classList.remove('dark')
+        else if (theme === "DARK") document.documentElement.classList.add('dark')
+    }
+
+    async function getUserSettings(token: string) {
+        const response = await getSettings(token);
+        const theme = response.theme;
+        if (theme !== localStorage.getItem('theme') && localStorage.getItem('theme')?.length) {
+            await setTheme(localStorage.getItem('userToken') as string, theme)
+        }
     }
 
     async function getData() {
-        if (!localStorage.getItem('userToken')) {
+        getTheme()
+        const token = localStorage.getItem('userToken');
+        if (!token) {
             if (router.pathname !== '/registration') router.push('/login')
             dispatch(setIsLoggedIn(false))
         } else {
-            dispatch(setIsLoggedIn(true))
+            if(!(await getUserInfo(token))) {
+                if (router.pathname !== '/registration') router.push('/login')
+                dispatch(setIsLoggedIn(false))
+            } else {
+                dispatch(setIsLoggedIn(true))
+                getUserSettings(token)
+            }
         }
     }
 
