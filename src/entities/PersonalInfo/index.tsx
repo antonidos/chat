@@ -40,18 +40,18 @@ const PersonalInfo = () => {
         background[0]?.classList.toggle('open')
     }
 
-    useEffect(() => {
-        async function getData() {
-            if (localStorage.getItem('userToken')){
-                dispatch(setPersonalInfo(await getUserInfo(localStorage.getItem('userToken') as string)));
-                console.log(user);
-            }  
-            else {
-                router.push('/login')
-            }
-        }
-        getData()
-    }, [])
+    // useEffect(() => {
+    //     async function getData() {
+    //         if (localStorage.getItem('userToken')){
+    //             dispatch(setPersonalInfo(await getUserInfo(localStorage.getItem('userToken') as string)));
+    //             console.log(user);
+    //         }  
+    //         else {
+    //             router.push('/login')
+    //         }
+    //     }
+    //     getData()
+    // }, [])
 
     return (
         <div>

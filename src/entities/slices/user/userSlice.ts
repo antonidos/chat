@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IRootState, IUserState } from "../reduxInterfaces";
 
-
-
 const initialState: IUserState = {
     isLoggedIn: false,
     personalInfo: {

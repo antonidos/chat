@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Logo from 'shared/Logo';
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, setIsLoggedIn } from 'entities/slices/user/userSlice';
+import { selectUser, setIsLoggedIn, setPersonalInfo } from 'entities/slices/user/userSlice';
 import { useRouter } from 'next/router';
 import { logout } from './api/apiLogout';
 import Image from 'next/image';
@@ -25,13 +25,15 @@ const Header = () => {
 
     const toggleDark = async () => {
         document.documentElement.classList.toggle('dark')
-        if (localStorage.getItem('userToken')) {
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.setItem('theme', 'DARK')
+        if (document.documentElement.classList.contains('dark')) {
+            localStorage.setItem('theme', 'DARK')
+            if (localStorage.getItem('userToken')) {
                 await setTheme(localStorage.getItem('userToken') as string, 'DARK')
             }
-            else {
-                localStorage.setItem('theme', 'LIGHT')
+        }
+        else {
+            localStorage.setItem('theme', 'LIGHT')
+            if (localStorage.getItem('userToken')) {
                 await setTheme(localStorage.getItem('userToken') as string, 'LIGHT')
             }
         }
@@ -58,10 +60,12 @@ const Header = () => {
             if (router.pathname !== '/registration') router.push('/login')
             dispatch(setIsLoggedIn(false))
         } else {
-            if(!(await getUserInfo(token))) {
+            const userData = await getUserInfo(token)
+            if (!userData) {
                 if (router.pathname !== '/registration') router.push('/login')
                 dispatch(setIsLoggedIn(false))
             } else {
+                dispatch(setPersonalInfo(userData))
                 dispatch(setIsLoggedIn(true))
                 getUserSettings(token)
             }

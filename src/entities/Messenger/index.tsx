@@ -7,6 +7,7 @@ import { getChat, getDialogs } from './api/apiMessenger';
 import SmallChat from './SmallChat/SmallChat';
 import { io } from "socket.io-client";
 import MainChat from './MainChat/MainChat';
+import { IPersonalInfo } from 'entities/slices/reduxInterfaces';
 
 export interface IMessage {
     sender: number,
@@ -19,6 +20,7 @@ const socket = io("http://localhost:8080");
 const Messenger = () => {
 
     const chats = useSelector(selectUser).userChats;
+    const userData = useSelector(selectUser).personalInfo as IPersonalInfo
     const [chatIds, setChatIds] = useState<number[]>([]);
     const dispatch = useDispatch();
     const [currentChat, setCurrentChat] = useState<number | null>(null)
@@ -28,8 +30,6 @@ const Messenger = () => {
     const getChats = async () => {
         const userToken = localStorage.getItem('userToken')
         if (userToken) {
-            const userData = await getUserInfo(userToken)
-            dispatch(setPersonalInfo(userData))
             const response = await getDialogs(userToken);
             const IDs = response.map(dialog => dialog.id)
             setChatIds(IDs)
@@ -40,7 +40,7 @@ const Messenger = () => {
 
     useEffect(() => {
         getChats()
-    }, [])
+    }, [userData?.id])
 
     const waitForMessages = (room: number) => {
         socket.on(`message/${room}`, async (payload) => {
