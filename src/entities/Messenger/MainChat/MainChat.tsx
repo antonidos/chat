@@ -44,34 +44,42 @@ const MainChat: FC<MainChatProps> = (props) => {
     }, [props.messages])
 
     return (
-        userChat ? (
-            <div className="flex align-center" id="current-dialog">
-                <h2 className='current-companion'>Диалог с: {userChat}</h2>
-                <div className="messages-area flex align-center">
-                    {props.messages.map((message, index) =>
-                        String(message.sender) === String(id) ? (
-                            <div key={index} className="message from-you">
-                                <p>{message.content}</p>
-                                <p className="time">{String(new Date(message.timestamp * 1000).toLocaleTimeString()).slice(0, 5)}</p>
-                            </div>
-                        ) : (
-                            <div key={index} className="message from-companion">
-                                <p>{message.content}</p>
-                                <p className="time">{String(new Date(message.timestamp * 1000).toLocaleTimeString()).slice(0, 5)}</p>
-                            </div>
-                        )
-                    )}
-                </div>
-                <div className="write-message flex jcc align-center">
-                    <textarea value={value} onChange={handleChange} className="inputlogin" />
-                    <button onClick={sendMessage} className="buttonLogin">Отправить сообщение</button>
-                </div>
-            </div>
-        ) : (
-            <div className="flex align-center" id="current-dialog">
-                <h2 className='current-companion'>Выберите диалог</h2>
-            </div>
-        )
+        <div className="flex items-center mt-5 p-0 bg-second flex-col rounded-r-xl border-2 border-border
+            dark:border-slate-700 dark:bg-slate-600 dark:text-orange-200" 
+            id="current-dialog">
+            {userChat ? (
+                <>
+                    <h2 className='text-center font-bold py-2.5 text-primary dark:text-orange-200'>Диалог с: {userChat}</h2>
+                    <div className="border-t-2 border-border flex items-center flex-col w-full h-full overflow-y-scroll dark:border-slate-700">
+                        {props.messages.map((message, index) =>
+                            String(message.sender) === String(id) ? (
+                                <div key={index} className="message flex self-end p-1 my-1 mr-3 rounded-md align-middle 
+                                border-2 border-border break-words dark:border-slate-700">
+                                    <p>{message.content}</p>
+                                    <p className="time pt-1 w-14 text-right text-sm">
+                                        {String(new Date(message.timestamp * 1000).toLocaleTimeString()).slice(0, 5)}
+                                    </p>
+                                </div>
+                            ) : (
+                                <div key={index} className="message flex self-start p-1 my-1 ml-3 rounded-md align-middle 
+                                border-2 border-border break-words dark:border-slate-700">
+                                    <p>{message.content}</p>
+                                    <p className="time pt-1 w-14 text-right text-sm align-middle">
+                                        {String(new Date(message.timestamp * 1000).toLocaleTimeString()).slice(0, 5)}
+                                    </p>
+                                </div>
+                            )
+                        )}
+                    </div>
+                    <div className="write-message box-border border-t-2 border-border p-2.5 w-full flex justify-center items-center dark:border-slate-700">
+                        <textarea value={value} onChange={handleChange} className="inputlogin mr-5 h-12 p-1 dark:bg-orange-200 dark:text-slate-800" />
+                        <button onClick={sendMessage} className="buttonLogin text-md py-1 px-5">Отправить</button>
+                    </div>
+                </>
+            ) : (
+                <h2 className='font-bold mt-3'>Выберите диалог</h2>
+            )}
+        </div>
 
     )
 }

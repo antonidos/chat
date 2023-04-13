@@ -10,7 +10,7 @@ interface SearchProps {
     setCurrentChat: React.Dispatch<React.SetStateAction<number | null>>
 }
 
-const Search:FC<SearchProps> = (props) => {
+const Search: FC<SearchProps> = (props) => {
     const [open, setOpen] = useState(false)
     const companions = useSelector(selectSearch)
     const [value, setValue] = useState('')
@@ -54,15 +54,15 @@ const Search:FC<SearchProps> = (props) => {
     }, [])
 
     return (
-        <form onFocus={() => setOpen(true)} onBlur={(e) => handleBlur(e)} className={'searchContainer'}>
+        <form onFocus={() => setOpen(true)} onBlur={(e) => handleBlur(e)} className={'relative'}>
             <input
-                className={'searchInput'}
+                className={'h-9 rounded-lg mt-1.5 mb-2.5 px-5 text-md outline-none dark:bg-slate-500 dark:text-orange-200 placeholder-orange-200'}
                 value={value}
                 placeholder="🔎 Search"
                 onChange={handleChange}
             ></input>
             {open ? (
-                <div className={'result'}>
+                <div className={'result absolute bg-white dark:bg-slate-500 dark:text-orange-200 flex flex-col w-9/10 rounded-lg top-12'}>
                     {status === 'loading' ? (
                         <div className={'ldsRing'}>
                             <div></div>
@@ -71,7 +71,14 @@ const Search:FC<SearchProps> = (props) => {
                             <div></div>
                         </div>
                     ) : companions ? companions.map(user => (
-                        <button type="button" onClick={() => addUser(user.username)} className={'user'} key={user.id}>{user.username}</button>
+                        <button type="button"
+                            onClick={() => addUser(user.username)}
+                            className={`m-1 rounded-md py-2.5 px-4  transition duration-300 
+                                cursor-pointer text-left text-md hover:bg-slate-300`} 
+                            key={user.id}
+                        >
+                            {user.username}
+                        </button>
                     )) : null}
                 </div>
             ) : null}

@@ -50,18 +50,22 @@ const Register = () => {
 
     return (
         <div className="container">
-            <div className="auth flex align-center">
-                <h1>Регистрация</h1>
+            <div className="auth flex items-center w-3/5 flex-col mx-auto border-4 border-border rounded-xl 
+            mt-5 bg-second box-border p-5 dark:bg-slate-600 dark:border-slate-700 dark:text-orange-200">
+                <h1 className='font-extrabold'>Регистрация</h1>
                 <h3>Введите почту</h3>
-                <input name='email' onChange={handleChange} className='inputlogin'></input>
+                <input name='email' onChange={handleChange} 
+                    className='inputlogin w-3/5 mb-3 border-2 border-border dark:bg-slate-400 dark:border-slate-900 dark:text-slate-900'></input>
                 <h3>Введите логин</h3>
-                <input name='username' onChange={handleChange} className='inputlogin'></input>
+                <input name='username' onChange={handleChange} 
+                    className='inputlogin w-3/5 mb-3 border-2 border-border dark:bg-slate-400 dark:border-slate-900 dark:text-slate-900'></input>
                 <h3>Введите пароль</h3>
-                <input type='password' name='password' onChange={handleChange} className='inputlogin'></input>
+                <input type='password' name='password' onChange={handleChange} 
+                    className='inputlogin w-3/5 mb-3 border-2 border-border dark:bg-slate-400 dark:border-slate-900 dark:text-slate-900'></input>
                 <button
                 onClick={handleSubmit}
                     disabled={!(state.email && state.password && state.username)}
-                    className='buttonLogin'
+                    className='buttonLogin bg-primary dark:bg-slate-900'
                 >
                     Зарегистрироваться
                 </button>

@@ -19,11 +19,11 @@ const Auth = () => {
     const handleSubmit = async (e: MouseEvent) => {
         const isDisabled = !(!!username?.length && !!password?.length);
         console.log(isDisabled)
-        
+
         if (!isDisabled) {
             const response = await login(username, password)
             // dispatch(setPersonalInfo((await getUserInfo(localStorage.getItem('userToken'))) || false))
-            if(response) {
+            if (response) {
                 dispatch(setIsLoggedIn(true))
                 router.push('/')
             }
@@ -46,14 +46,23 @@ const Auth = () => {
 
     return (
         <div className="container">
-            <div className="auth flex align-center">
-                <h1>Авторизация</h1>
+            <div className="auth flex items-center w-3/5 flex-col mx-auto border-4 border-border rounded-xl 
+            mt-5 bg-second box-border p-5 dark:bg-slate-600 dark:border-slate-700 dark:text-orange-200">
+                <h1 className='font-extrabold'>Авторизация</h1>
                 <h3>Введите логин</h3>
-                <input name='username' onChange={handleCnahge} className='inputlogin'></input>
+                <input name='username' onChange={handleCnahge}
+                    className='inputlogin w-3/5 mb-3 border-2 border-border dark:bg-slate-400 dark:border-slate-900 dark:text-slate-900'></input>
                 <h3>Введите пароль</h3>
-                <input type='password' name='password' onChange={handleCnahge} className='inputlogin'></input>
-                <button disabled={!username || !password} onClick={handleSubmit} className='buttonLogin'>Войти</button>
-                <p>Нет аккаунта? <Link className='link' href='/registration'>зарегистрироваться</Link></p>
+                <input type='password' name='password' onChange={handleCnahge}
+                    className='inputlogin w-3/5 mb-3 border-2 border-border dark:bg-slate-400 dark:border-slate-900 dark:text-slate-900'></input>
+                <button
+                    disabled={!username || !password}
+                    onClick={handleSubmit}
+                    className='buttonLogin bg-primary dark:bg-slate-900'
+                >
+                    Войти
+                </button>
+                <p>Нет аккаунта? <Link className='text-orange-200 dark:underline' href='/registration'>зарегистрироваться</Link></p>
             </div>
         </div>
     );

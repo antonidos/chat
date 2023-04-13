@@ -21,6 +21,10 @@ const Header = () => {
         router.push("/login")
     }
 
+    const toggleDark = () => {
+        document.documentElement.classList.toggle('dark')
+    }
+
     async function getData() {
         if (!localStorage.getItem('userToken')) {
             if (router.pathname !== '/registration') router.push('/login')
@@ -35,29 +39,30 @@ const Header = () => {
     }, [])
 
     return (
-        <header>
-            <div className="container flex align-center space-between">
+        <header className='px-4 py-2 h-18 box-border bg-header dark:bg-slate-800'>
+            <div className="container flex items-center justify-between">
                 <Logo />
-                <div className="menu flex space-between align-center">
+                <div className="flex justify-between items-centerr">
                     <Image
-                        className='theme'
+                        className='mx-5 cursor-pointer'
                         src='/images/sleep-mode.png'
                         alt='night mode'
                         width={30}
                         height={30}
+                        onClick={toggleDark}
                     />
                     {isLoggedIn ?
                         <>
                             <Link
                                 href='/personal'
-                                className="link"
+                                className="mx-5 cursor-pointer text-orange-200"
                             >
                                 <div>
                                     Личный кабинет
                                 </div>
                             </Link>
 
-                            <div onClick={handleClick} className="link">
+                            <div onClick={handleClick} className="mx-5 cursor-pointer text-orange-200">
                                 Выйти
                             </div>
 
@@ -65,7 +70,7 @@ const Header = () => {
                         : <>
                             <Link
                                 href='/login'
-                                className="link"
+                                className="mx-5 cursor-pointer text-orange-200"
                             >
                                 <div>
                                     Авторизация
@@ -73,7 +78,7 @@ const Header = () => {
                             </Link>
                             <Link
                                 href='/registration'
-                                className="link"
+                                className="mx-5 cursor-pointer text-orange-200"
                             >
                                 <div>
                                     Регистрация

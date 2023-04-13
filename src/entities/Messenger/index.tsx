@@ -59,10 +59,12 @@ const Messenger = () => {
 
     return (
         <div className='container'>
-            <div className="messenger flex align-start">
-                <div className="list-of-dialogs">
-                    <h2>Ваши диалоги:</h2>
-                    <div className="dialogs">
+            <div className="flex items-start w-full h-full">
+                <div className="w-2/5 h-full mr-2.5 overflow-y-scroll">
+                    <h2 className='absolute mt-5 mb-4 ml-4 p-2.5 rounded-xl text-second bg-primary font-bold dark:text-orange-200 dark:bg-slate-900'>
+                        Ваши диалоги:
+                    </h2>
+                    <div className="mt-20">
                         <Search getChats={getChats} setCurrentChat={setCurrentChat} />
                         {chats.map((chat, index) => (
                             <SmallChat key={index}
