@@ -36,7 +36,7 @@ const SmallChat: FC<SmallChatProps> = (props) => {
       dark:border-slate-700 dark:text-orange-200 dark:hover:bg-slate-800'>
       <div>
         <p>{props.name}</p>
-        <p className='text-white opacity-80 z-0'>{props.formattedMessage}</p>
+        <p className='dark:text-white text-gray-800 opacity-80 z-0'>{props.formattedMessage}</p>
       </div>
       <div onClick={deleteDialogOfUser} className="self-start px-2 text-xl z-10 transition-colors duration-500 rounded-md
       hover:text-red-500 hover:bg-primary dark:hover:bg-slate-400 dark:hover:text-orange-200">X</div>

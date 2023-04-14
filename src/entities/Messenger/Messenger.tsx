@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Search from './SearchUsers/SearchUsers';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setChatsOfUser, setIsLoggedIn } from 'entities/slices/user/userSlice';
 import { getChat, getDialogs } from './api/apiMessenger';
 import SmallChat from './SmallChat/SmallChat';
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import MainChat from './MainChat/MainChat';
-import { IPersonalInfo } from 'entities/slices/reduxInterfaces';
+import { IChat, IPersonalInfo } from 'entities/slices/reduxInterfaces';
+import { ILastMessage } from './api/apiMessengerInterfaces';
 
 export interface IMessage {
     sender: number,
@@ -14,9 +15,9 @@ export interface IMessage {
     timestamp: number
 }
 
-const socket = io("http://localhost:8080");
-
 const Messenger = () => {
+
+    const socketRef = useRef<Socket | null>(null);
 
     const chats = useSelector(selectUser).userChats;
     const userData = useSelector(selectUser).personalInfo as IPersonalInfo;
@@ -24,6 +25,20 @@ const Messenger = () => {
     const [currentChat, setCurrentChat] = useState<number | null>(null)
 
     const [messages, setMessages] = useState<IMessage[]>([])
+
+    const formatMessage = (lastMessage: ILastMessage | undefined) => {
+        let formattedMessage = 'Последнее сообщение...'
+        if (lastMessage) {
+            let sender;
+            let content = lastMessage.content
+            sender = lastMessage.sender === userData.id ? "Вы" : "Собеседник"
+            formattedMessage = `${sender}: ${content}`
+            if (formattedMessage.length > 40) {
+                formattedMessage = formattedMessage.slice(0, 25) + '...'
+            }
+        }
+        return formattedMessage;
+    }
 
     const getChats = async () => {
         const userToken = localStorage.getItem('userToken')
@@ -33,17 +48,8 @@ const Messenger = () => {
                 const companion = dialog.username1 == userData.username ?
                     dialog.username2 : dialog.username1
                 const id = dialog.id
-                const lastMessage = response.lastMessages.find(message => message.dialog_id === dialog.id ? message : null)
-                let formattedMessage = 'Последнее сообщение...'
-                if (lastMessage) {
-                    let sender;
-                    let content = lastMessage.content
-                    sender = lastMessage.sender === userData.id ? "Вы" : "Собеседник"
-                    formattedMessage = `${sender}: ${content}`
-                    if (formattedMessage.length > 40) {
-                        formattedMessage = formattedMessage.slice(0, 25) + '...'
-                    }
-                }
+                const lastMessage = response.lastMessages?.find(message => message.dialog_id === dialog.id ? message : null)
+                const formattedMessage = formatMessage(lastMessage)
                 // console.log(formattedMessage)
                 return { id, companion, formattedMessage }
             })
@@ -51,38 +57,85 @@ const Messenger = () => {
         } else dispatch(setIsLoggedIn(false))
     }
 
-    // useMemo(() => console.log(messages), [messages]);
+    const updateChatList = (room: number, payload: [string, number]) => {
+        const chatCopy = chats.slice();
+        const newMessage = chatCopy.find(chat => chat.id === room);
+        let companion = newMessage?.companion;
+        const lastMessage: ILastMessage = {
+            dialog_id: room,
+            sender: payload[1],
+            content: payload[0]
+        }
+        const formattedMessage = formatMessage(lastMessage);
+        if (newMessage) {
+            chatCopy.splice(chatCopy.indexOf(newMessage), 1, {
+                companion: companion as string,
+                id: room,
+                formattedMessage: formattedMessage
+            });
+        }
+        dispatch(setChatsOfUser(chatCopy))
+    }
 
     useEffect(() => {
-        getChats()
-    }, []);
-
-    useEffect(() => {
-        if (messages?.length) {
+        console.log("rerender userData.id")
+        if (userData.id) {
             getChats()
         }
-    }, [messages]);
+    }, [userData.id]);
 
     useEffect(() => {
-        waitForMessages(chats[currentChat as number]?.id)
-        if (messages.length !== 0) {
+        socketRef.current = io("http://localhost:8080");
+        console.log("rerender chats")
+        console.log(chats)
+        console.log(currentChat)
+
+        const waitForMessages = (room: number) => {
+            socketRef.current?.on(`message/${room}`, async (payload) => {
+                if (chats[currentChat as number]?.id === room) {
+                    console.log('here')
+                    setMessages((prevMessages) => [
+                        ...prevMessages,
+                        {
+                            sender: payload[1],
+                            content: payload[0],
+                            timestamp: Math.floor(Date.now() / 1000),
+                        },
+                    ]);
+                }
+                updateChatList(room, payload)
+            });
+        };
+
+        chats.forEach((chat) => {
+            waitForMessages(chat.id);
+        });
+
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+            }
+        };
+
+    }, [chats, currentChat]);
+
+    useEffect(() => {
+        console.log("rerender messages")
+        if (messages?.length) {
             const scrollDiv = document.getElementById("current-dialog") as HTMLElement
             scrollDiv.scrollTo(0, scrollDiv.scrollHeight)
         }
     }, [messages]);
 
-    const waitForMessages = (room: number) => {
-        socket.on(`message/${room}`, async (payload) => {
-            setMessages([...messages, { sender: payload[1], content: payload[0], timestamp: Math.floor(Date.now() / 1000) }])
-        })
-    }
-
     const sendMessageSocket = (content: string, room: number) => {
-        socket.emit('sendMessage', content, room, userData.id)
-    }
+        if (socketRef.current) {
+            socketRef.current.emit("sendMessage", content, room, userData.id);
+        }
+    };
 
     const addMessageFront = (sender: number, content: string) => {
         setMessages([...messages, { sender: sender, content: content, timestamp: Math.floor(Date.now() / 1000) }])
+        updateChatList(chats[currentChat as number]?.id, [content, sender])
     }
 
     return (

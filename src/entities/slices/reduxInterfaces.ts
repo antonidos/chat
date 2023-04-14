@@ -6,7 +6,7 @@ export interface IPersonalInfo {
     id: number | null
 }
 
-interface IChat {
+export interface IChat {
     companion: string;
     formattedMessage: string;
     id: number
