@@ -34,7 +34,8 @@ const Search: FC<SearchProps> = (props) => {
     const addUser = async (username: string) => {
         const token = localStorage.getItem('userToken')
         if (token) {
-            if (chats.indexOf(username) > -1) props.setCurrentChat(chats.indexOf(username))
+            if (chats.findIndex(chat => chat.companion === username) > -1)
+                props.setCurrentChat(chats.findIndex(chat => chat.companion === username))
             else {
                 const response = await addDialog(token, username)
                 if (response) {

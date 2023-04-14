@@ -6,10 +6,15 @@ export interface IPersonalInfo {
     id: number | null
 }
 
+interface IChat {
+    companion: string;
+    formattedMessage: string
+}[]
+
 export interface IUserState {
     isLoggedIn: boolean,
     personalInfo: IPersonalInfo | null,
-    userChats: string[]
+    userChats: IChat[]
 }
 
 export interface ISearchValue {

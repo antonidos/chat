@@ -7,6 +7,7 @@ interface SmallChatProps {
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>
   id: number,
   name: string,
+  formattedMessage: string,
   getChats: () => void,
   idBack: number
 }
@@ -29,12 +30,13 @@ const SmallChat: FC<SmallChatProps> = (props) => {
   }
 
   return (
-    <div className='p-1.5 pl-4 border-2 border-border rounded-l-xl bg-second 
+    <div onClick={handleClickChat} 
+    className='p-1.5 pl-4 border-2 border-border rounded-l-xl bg-second 
       flex justify-between my-2 cursor-pointer hover:bg-red-100 transition-colors dark:bg-slate-600 
       dark:border-slate-700 dark:text-orange-200 dark:hover:bg-slate-800'>
-      <div onClick={handleClickChat}>
+      <div>
         <p>{props.name}</p>
-        <p>Последнее сообщение...</p>
+        <p className='text-white opacity-80 z-0'>{props.formattedMessage}</p>
       </div>
       <div onClick={deleteDialogOfUser} className="pt-1 self-start pr-2.5 pb-2 pl-2.5 text-xl z-10 transition-colors duration-500 rounded-md
       hover:text-red-500 hover:bg-primary dark:hover:bg-slate-900 dark:hover:text-orange-200">X</div>

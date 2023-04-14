@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Search from './SearchUsers';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfo } from 'entities/PersonalInfo/api/personalDataApi';
-import { selectUser, setChatsOfUser, setIsLoggedIn, setPersonalInfo } from 'entities/slices/user/userSlice';
+import { selectUser, setChatsOfUser, setIsLoggedIn } from 'entities/slices/user/userSlice';
 import { getChat, getDialogs } from './api/apiMessenger';
 import SmallChat from './SmallChat/SmallChat';
 import { io } from "socket.io-client";
@@ -31,19 +30,34 @@ const Messenger = () => {
         const userToken = localStorage.getItem('userToken')
         if (userToken) {
             const response = await getDialogs(userToken);
-            const IDs = response.map(dialog => dialog.id)
+            const IDs = response.dialogs.map(dialog => dialog.id)
             setChatIds(IDs)
-            const chats = response.map(dialog => dialog.username1 == userData.username ? dialog.username2 : dialog.username1)
+            const chats = response.dialogs.map(dialog => {
+                const companion = dialog.username1 == userData.username ?
+                    dialog.username2 : dialog.username1
+                const lastMessage = response.lastMessages.find(message => message.dialog_id === dialog.id ? message : null)
+                let formattedMessage = 'Последнее сообщение...'
+                if (lastMessage) {
+                    let sender;
+                    let content = lastMessage.content
+                    sender = lastMessage.sender === userData.id ? "Вы" : "Собеседник"
+                    formattedMessage = `${sender}: ${content}`
+                    if(formattedMessage.length > 40){
+                        formattedMessage = formattedMessage.slice(0,25)+'...'
+                    }
+                }
+                console.log(formattedMessage)
+                return { companion, formattedMessage }
+            })
             dispatch(setChatsOfUser(chats))
         } else dispatch(setIsLoggedIn(false))
     }
 
-    useEffect(() => {
-        getChats()
-    }, [userData?.id])
+    useMemo(() => getChats(), [userData?.id, messages]);
 
     const waitForMessages = (room: number) => {
         socket.on(`message/${room}`, async (payload) => {
+            console.log(payload)
             const response = await getChat(room);
             setMessages(response)
         })
@@ -69,8 +83,9 @@ const Messenger = () => {
                         <Search getChats={getChats} setCurrentChat={setCurrentChat} />
                         {chats.map((chat, index) => (
                             <SmallChat key={index}
-                                name={chat}
+                                name={chat.companion}
                                 getChats={getChats}
+                                formattedMessage={chat.formattedMessage}
                                 id={index}
                                 idBack={chatIds[index]}
                                 setMessages={setMessages}

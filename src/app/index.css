@@ -58,7 +58,7 @@ h1 {
   background-color: #fff;
 }
 
-#current-dialog {
+#dialog-window {
   height: 80vh;
   width: 58%;
 }
@@ -96,6 +96,14 @@ h1 {
   height: 80px;
   justify-self: center;
   align-self: center;
+}
+
+.message {
+  max-width: 60%;
+}
+
+.body-message {
+  max-width: calc(100% - 50px);
 }
 
 .ldsRing div {

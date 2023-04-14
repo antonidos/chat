@@ -46,16 +46,17 @@ const MainChat: FC<MainChatProps> = (props) => {
     return (
         <div className="flex items-center mt-5 p-0 bg-second flex-col rounded-r-xl border-2 border-border
             dark:border-slate-700 dark:bg-slate-600 dark:text-orange-200" 
-            id="current-dialog">
+            id="dialog-window">
             {userChat ? (
                 <>
-                    <h2 className='text-center font-bold py-2.5 text-primary dark:text-orange-200'>Диалог с: {userChat}</h2>
-                    <div className="border-t-2 border-border flex items-center flex-col w-full h-full overflow-y-scroll dark:border-slate-700">
+                    <h2 className='text-center font-bold py-2.5 text-primary dark:text-orange-200'>Диалог с: {userChat.companion}</h2>
+                    <div className="border-t-2 border-border flex items-center flex-col w-full h-full overflow-y-scroll 
+                    dark:border-slate-700" id="current-dialog">
                         {props.messages.map((message, index) =>
                             String(message.sender) === String(id) ? (
                                 <div key={index} className="message flex self-end p-1 my-1 mr-3 rounded-md align-middle 
-                                border-2 border-border break-words dark:border-slate-700">
-                                    <p>{message.content}</p>
+                                border-2 border-border break-words dark:border-slate-700 max-w-fi">
+                                    <p className='break-words body-message'>{message.content}</p>
                                     <p className="time pt-1 w-14 text-right text-sm">
                                         {String(new Date(message.timestamp * 1000).toLocaleTimeString()).slice(0, 5)}
                                     </p>
@@ -63,7 +64,7 @@ const MainChat: FC<MainChatProps> = (props) => {
                             ) : (
                                 <div key={index} className="message flex self-start p-1 my-1 ml-3 rounded-md align-middle 
                                 border-2 border-border break-words dark:border-slate-700">
-                                    <p>{message.content}</p>
+                                    <p className='break-words'>{message.content}</p>
                                     <p className="time pt-1 w-14 text-right text-sm align-middle">
                                         {String(new Date(message.timestamp * 1000).toLocaleTimeString()).slice(0, 5)}
                                     </p>
