@@ -1,5 +1,5 @@
 import { deleteDialog, getChat } from '../api/apiMessenger'
-import { IMessage } from '..'
+import { IMessage } from '../Messenger'
 import React, { FC } from 'react'
 
 interface SmallChatProps {
@@ -38,8 +38,8 @@ const SmallChat: FC<SmallChatProps> = (props) => {
         <p>{props.name}</p>
         <p className='text-white opacity-80 z-0'>{props.formattedMessage}</p>
       </div>
-      <div onClick={deleteDialogOfUser} className="pt-1 self-start pr-2.5 pb-2 pl-2.5 text-xl z-10 transition-colors duration-500 rounded-md
-      hover:text-red-500 hover:bg-primary dark:hover:bg-slate-900 dark:hover:text-orange-200">X</div>
+      <div onClick={deleteDialogOfUser} className="self-start px-2 text-xl z-10 transition-colors duration-500 rounded-md
+      hover:text-red-500 hover:bg-primary dark:hover:bg-slate-400 dark:hover:text-orange-200">X</div>
     </div>
   )
 }

@@ -83,7 +83,7 @@ const Header = () => {
                 <div className="flex justify-between items-centerr">
                     <Image
                         className='mx-5 cursor-pointer'
-                        src='/images/sleep-mode.png'
+                        src='/images/sleep-mode2.png'
                         alt='night mode'
                         width={30}
                         height={30}

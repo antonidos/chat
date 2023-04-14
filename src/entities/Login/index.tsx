@@ -19,7 +19,6 @@ const Auth = () => {
 
     const handleSubmit = async (e: MouseEvent) => {
         const isDisabled = !(!!username?.length && !!password?.length);
-        console.log(isDisabled)
 
         if (!isDisabled) {
             const response = await login(username, password)

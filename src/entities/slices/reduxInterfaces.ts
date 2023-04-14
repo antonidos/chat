@@ -8,7 +8,8 @@ export interface IPersonalInfo {
 
 interface IChat {
     companion: string;
-    formattedMessage: string
+    formattedMessage: string;
+    id: number
 }[]
 
 export interface IUserState {

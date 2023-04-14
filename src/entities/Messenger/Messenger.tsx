@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Search from './SearchUsers';
+import Search from './SearchUsers/SearchUsers';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setChatsOfUser, setIsLoggedIn } from 'entities/slices/user/userSlice';
 import { getChat, getDialogs } from './api/apiMessenger';
@@ -19,8 +19,7 @@ const socket = io("http://localhost:8080");
 const Messenger = () => {
 
     const chats = useSelector(selectUser).userChats;
-    const userData = useSelector(selectUser).personalInfo as IPersonalInfo
-    const [chatIds, setChatIds] = useState<number[]>([]);
+    const userData = useSelector(selectUser).personalInfo as IPersonalInfo;
     const dispatch = useDispatch();
     const [currentChat, setCurrentChat] = useState<number | null>(null)
 
@@ -30,11 +29,10 @@ const Messenger = () => {
         const userToken = localStorage.getItem('userToken')
         if (userToken) {
             const response = await getDialogs(userToken);
-            const IDs = response.dialogs.map(dialog => dialog.id)
-            setChatIds(IDs)
             const chats = response.dialogs.map(dialog => {
                 const companion = dialog.username1 == userData.username ?
                     dialog.username2 : dialog.username1
+                const id = dialog.id
                 const lastMessage = response.lastMessages.find(message => message.dialog_id === dialog.id ? message : null)
                 let formattedMessage = 'Последнее сообщение...'
                 if (lastMessage) {
@@ -42,29 +40,45 @@ const Messenger = () => {
                     let content = lastMessage.content
                     sender = lastMessage.sender === userData.id ? "Вы" : "Собеседник"
                     formattedMessage = `${sender}: ${content}`
-                    if(formattedMessage.length > 40){
-                        formattedMessage = formattedMessage.slice(0,25)+'...'
+                    if (formattedMessage.length > 40) {
+                        formattedMessage = formattedMessage.slice(0, 25) + '...'
                     }
                 }
-                console.log(formattedMessage)
-                return { companion, formattedMessage }
+                // console.log(formattedMessage)
+                return { id, companion, formattedMessage }
             })
             dispatch(setChatsOfUser(chats))
         } else dispatch(setIsLoggedIn(false))
     }
 
-    useMemo(() => getChats(), [userData?.id, messages]);
+    // useMemo(() => console.log(messages), [messages]);
+
+    useEffect(() => {
+        getChats()
+    }, []);
+
+    useEffect(() => {
+        if (messages?.length) {
+            getChats()
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        waitForMessages(chats[currentChat as number]?.id)
+        if (messages.length !== 0) {
+            const scrollDiv = document.getElementById("current-dialog") as HTMLElement
+            scrollDiv.scrollTo(0, scrollDiv.scrollHeight)
+        }
+    }, [messages]);
 
     const waitForMessages = (room: number) => {
         socket.on(`message/${room}`, async (payload) => {
-            console.log(payload)
-            const response = await getChat(room);
-            setMessages(response)
+            setMessages([...messages, { sender: payload[1], content: payload[0], timestamp: Math.floor(Date.now() / 1000) }])
         })
     }
 
     const sendMessageSocket = (content: string, room: number) => {
-        socket.emit('sendMessage', content, room)
+        socket.emit('sendMessage', content, room, userData.id)
     }
 
     const addMessageFront = (sender: number, content: string) => {
@@ -87,7 +101,7 @@ const Messenger = () => {
                                 getChats={getChats}
                                 formattedMessage={chat.formattedMessage}
                                 id={index}
-                                idBack={chatIds[index]}
+                                idBack={chats[index]?.id}
                                 setMessages={setMessages}
                                 setCurrentChat={setCurrentChat} />
                         ))}
@@ -95,10 +109,9 @@ const Messenger = () => {
                 </div>
                 <MainChat addMessageFront={addMessageFront}
                     messages={messages}
-                    idBack={chatIds[currentChat as number]}
+                    idBack={chats[currentChat as number]?.id}
                     userId={currentChat as number}
-                    sendMessageSocket={sendMessageSocket}
-                    waitForMessages={waitForMessages} />
+                    sendMessageSocket={sendMessageSocket} />
             </div>
         </div>
     );

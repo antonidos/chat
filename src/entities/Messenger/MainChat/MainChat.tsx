@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { selectUser } from 'entities/slices/user/userSlice';
-import { IMessage } from '..';
+import { IMessage } from '../Messenger';
 import { addMessage } from '../api/apiMessenger';
 
 interface MainChatProps {
@@ -9,8 +9,7 @@ interface MainChatProps {
     messages: IMessage[],
     idBack: number,
     userId: number,
-    sendMessageSocket: (content: string, room: number) => void,
-    waitForMessages: (room: number) => void
+    sendMessageSocket: (content: string, room: number) => void
 }
 
 const MainChat: FC<MainChatProps> = (props) => {
@@ -23,6 +22,14 @@ const MainChat: FC<MainChatProps> = (props) => {
         setValue(value)
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            // Если нажата клавиша Enter без Shift, отправляем сообщение
+            event.preventDefault(); // Останавливаем действие по умолчанию (перенос строки)
+            sendMessage();
+        }
+    };
+
     const sendMessage = async () => {
         if (localStorage.getItem('userToken')) {
             await addMessage(localStorage.getItem('userToken') as string, props.idBack, value)
@@ -32,20 +39,9 @@ const MainChat: FC<MainChatProps> = (props) => {
         }
     }
 
-    useEffect(() => {
-        props.waitForMessages(props.idBack)
-    }, [props.idBack])
-
-    useEffect(() => {
-        if (props.messages.length !== 0) {
-            const scrollDiv = document.getElementById("current-dialog") as HTMLElement
-            scrollDiv.scrollTo(0, scrollDiv.scrollHeight)
-        }
-    }, [props.messages])
-
     return (
         <div className="flex items-center mt-5 p-0 bg-second flex-col rounded-r-xl border-2 border-border
-            dark:border-slate-700 dark:bg-slate-600 dark:text-orange-200" 
+            dark:border-slate-700 dark:bg-slate-600 dark:text-orange-200"
             id="dialog-window">
             {userChat ? (
                 <>
@@ -73,7 +69,7 @@ const MainChat: FC<MainChatProps> = (props) => {
                         )}
                     </div>
                     <div className="write-message box-border border-t-2 border-border py-2.5 px-5 w-full flex justify-center items-center dark:border-slate-700">
-                        <textarea value={value} onChange={handleChange} 
+                        <textarea value={value} onChange={handleChange} onKeyDown={handleKeyDown}
                             className="inputlogin mr-5 h-12 p-1 dark:bg-orange-200 dark:text-slate-800 w-full" />
                         <button onClick={sendMessage} className="buttonLogin text-md py-1 px-5 bg-primary dark:bg-slate-900">Отправить</button>
                     </div>

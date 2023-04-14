@@ -18,12 +18,10 @@ const Register = () => {
 
     const handleChange = ({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
         setState({ ...state, [name]: value })
-        console.log(state)
     }
 
     const handleSubmit = async (e: MouseEvent) => {
         const isDisabled = !(!!state.username?.length && !!state.password?.length);
-        console.log(isDisabled)
 
         if (!isDisabled) {
             const response = await register(state.username, state.password, state.email)
