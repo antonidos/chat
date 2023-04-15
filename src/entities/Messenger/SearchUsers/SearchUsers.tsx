@@ -79,7 +79,7 @@ const Search: FC<SearchProps> = (props) => {
                                 <button type="button"
                                     onClick={() => addUser(user.username)}
                                     className={`m-1 rounded-md py-2.5 px-4  transition duration-300 
-                                cursor-pointer text-left text-md hover:bg-slate-300 block`}
+                                cursor-pointer text-left text-md hover:bg-slate-300 block w-full`}
                                     key={user.id}
                                 >
                                     {user.username}

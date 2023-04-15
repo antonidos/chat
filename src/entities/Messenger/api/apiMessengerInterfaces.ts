@@ -1,7 +1,8 @@
 export interface ILastMessage {
     dialog_id: number,
-    sender: number,
-    content: string
+    sender: string,
+    content: string,
+    timestamp: number | undefined
 }
 
 interface IDialogs {

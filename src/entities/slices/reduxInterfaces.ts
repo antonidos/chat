@@ -9,7 +9,8 @@ export interface IPersonalInfo {
 export interface IChat {
     companion: string;
     formattedMessage: string;
-    id: number
+    id: number,
+    timeLastMessage: number | undefined
 }[]
 
 export interface IUserState {

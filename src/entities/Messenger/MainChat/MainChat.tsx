@@ -5,7 +5,7 @@ import { IMessage } from '../Messenger';
 import { addMessage } from '../api/apiMessenger';
 
 interface MainChatProps {
-    addMessageFront: (sender: number, content: string) => void,
+    addMessageFront: (sender: string, content: string) => void,
     messages: IMessage[],
     idBack: number,
     userId: number,
@@ -15,7 +15,7 @@ interface MainChatProps {
 const MainChat: FC<MainChatProps> = (props) => {
 
     const userChat = useSelector(selectUser).userChats[props.userId]
-    const id = useSelector(selectUser).personalInfo?.id as number;
+    const username = useSelector(selectUser).personalInfo?.username as string;
     const [value, setValue] = useState('')
 
     const handleChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => {
@@ -34,7 +34,7 @@ const MainChat: FC<MainChatProps> = (props) => {
         if (localStorage.getItem('userToken')) {
             await addMessage(localStorage.getItem('userToken') as string, props.idBack, value)
             props.sendMessageSocket(value, props.idBack)
-            props.addMessageFront(id, value)
+            props.addMessageFront(username, value)
             setValue('')
         }
     }
@@ -49,7 +49,7 @@ const MainChat: FC<MainChatProps> = (props) => {
                     <div className="border-t-2 border-border flex items-center flex-col w-full h-full overflow-y-scroll 
                     dark:border-slate-700" id="current-dialog">
                         {props.messages.map((message, index) =>
-                            String(message.sender) === String(id) ? (
+                            String(message.sender) === String(username) ? (
                                 <div key={index} className="message flex self-end p-1 my-1 mr-3 rounded-md align-middle 
                                 border-2 border-border break-words dark:border-slate-700 max-w-fi">
                                     <p className='break-words body-message'>{message.content}</p>

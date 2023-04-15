@@ -16,7 +16,6 @@ const PersonalInfo = () => {
     })
 
     const handleChange = ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
-        console.log(state)
         setState({ ...state, [name]: value })
     }
 

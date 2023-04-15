@@ -8,11 +8,16 @@ import { Socket, io } from "socket.io-client";
 import MainChat from './MainChat/MainChat';
 import { IChat, IPersonalInfo } from 'entities/slices/reduxInterfaces';
 import { ILastMessage } from './api/apiMessengerInterfaces';
+import { Theme, ToastTransition, toast } from 'react-toastify';
 
 export interface IMessage {
-    sender: number,
+    sender: string,
     content: string,
     timestamp: number
+}
+
+interface IFormatMessage {
+    (lastMessage: ILastMessage | undefined): [string, number | undefined]
 }
 
 const Messenger = () => {
@@ -22,63 +27,87 @@ const Messenger = () => {
     const chats = useSelector(selectUser).userChats;
     const userData = useSelector(selectUser).personalInfo as IPersonalInfo;
     const dispatch = useDispatch();
-    const [currentChat, setCurrentChat] = useState<number | null>(null)
+    const [currentIndex, setCurrentChat] = useState<number | null>(null)
 
     const [messages, setMessages] = useState<IMessage[]>([])
 
-    const formatMessage = (lastMessage: ILastMessage | undefined) => {
+    const formatMessage: IFormatMessage = (lastMessage) => {
         let formattedMessage = 'Последнее сообщение...'
         if (lastMessage) {
-            let sender;
-            let content = lastMessage.content
-            sender = lastMessage.sender === userData.id ? "Вы" : "Собеседник"
-            formattedMessage = `${sender}: ${content}`
+            const sender = lastMessage.sender === userData.username ? "Вы" : (lastMessage.sender || "Собеседник")
+            formattedMessage = `${sender}: ${lastMessage.content}`
             if (formattedMessage.length > 40) {
                 formattedMessage = formattedMessage.slice(0, 25) + '...'
             }
         }
-        return formattedMessage;
+        const timeLastMessage = lastMessage?.timestamp
+        return [formattedMessage, timeLastMessage];
     }
 
     const getChats = async () => {
         const userToken = localStorage.getItem('userToken')
         if (userToken) {
             const response = await getDialogs(userToken);
-            const chats = response.dialogs.map(dialog => {
+            const chats:IChat[] = response.dialogs.map(dialog => {
                 const companion = dialog.username1 == userData.username ?
                     dialog.username2 : dialog.username1
                 const id = dialog.id
                 const lastMessage = response.lastMessages?.find(message => message.dialog_id === dialog.id ? message : null)
-                const formattedMessage = formatMessage(lastMessage)
+                const [formattedMessage, timeLastMessage] = formatMessage(lastMessage)
+                
                 // console.log(formattedMessage)
-                return { id, companion, formattedMessage }
+                return { id, companion, formattedMessage, timeLastMessage }
             })
-            dispatch(setChatsOfUser(chats))
+            const sortedChats = sortChats(chats)
+            dispatch(setChatsOfUser(sortedChats))
         } else dispatch(setIsLoggedIn(false))
     }
 
-    const updateChatList = (room: number, payload: [string, number]) => {
+    const updateChatList = (room: number, payload: [string, string, number]) => {
         const chatCopy = chats.slice();
         const newMessage = chatCopy.find(chat => chat.id === room);
-        let companion = newMessage?.companion;
+        let companion: string; 
         const lastMessage: ILastMessage = {
             dialog_id: room,
             sender: payload[1],
-            content: payload[0]
+            content: payload[0],
+            timestamp: payload[2]
         }
-        const formattedMessage = formatMessage(lastMessage);
+        const [formattedMessage, timeLastMessage] = formatMessage(lastMessage);
         if (newMessage) {
+            companion = newMessage.companion
             chatCopy.splice(chatCopy.indexOf(newMessage), 1, {
-                companion: companion as string,
+                companion: companion,
                 id: room,
-                formattedMessage: formattedMessage
+                formattedMessage: formattedMessage,
+                timeLastMessage: timeLastMessage
             });
         }
-        dispatch(setChatsOfUser(chatCopy))
+        const sortedChats = sortChats(chatCopy)
+        dispatch(setChatsOfUser(sortedChats))
+        return [formattedMessage]
+    }
+
+    const sortChats = (chats: IChat[]) => {
+        const chatsCopy = chats.slice()
+        let currentChat;
+        if(currentIndex) {
+            currentChat = chatsCopy[currentIndex]
+        }
+        chatsCopy.sort((a,b) => {
+            if(a.timeLastMessage && b.timeLastMessage){
+                if(a.timeLastMessage >= b.timeLastMessage) return -1
+                else return 1
+            } 
+            else if(a.timeLastMessage && !b.timeLastMessage) return -1 
+            else if(!a.timeLastMessage && b.timeLastMessage) return 1
+            else return 0
+        })
+        if(currentChat) setCurrentChat(chatsCopy.indexOf(currentChat))
+        return chatsCopy;
     }
 
     useEffect(() => {
-        console.log("rerender userData.id")
         if (userData.id) {
             getChats()
         }
@@ -86,24 +115,28 @@ const Messenger = () => {
 
     useEffect(() => {
         socketRef.current = io("http://localhost:8080");
-        console.log("rerender chats")
-        console.log(chats)
-        console.log(currentChat)
 
         const waitForMessages = (room: number) => {
             socketRef.current?.on(`message/${room}`, async (payload) => {
-                if (chats[currentChat as number]?.id === room) {
+                const [content, sender] = payload;
+                const [formattedMessage] = updateChatList(room, payload);
+
+                if (chats[currentIndex as number]?.id === room) {
                     console.log('here')
                     setMessages((prevMessages) => [
                         ...prevMessages,
                         {
-                            sender: payload[1],
-                            content: payload[0],
+                            sender: sender,
+                            content: content,
                             timestamp: Math.floor(Date.now() / 1000),
                         },
                     ]);
+                } else {
+                    const [senderFormatted, contentFormatted] = formattedMessage.split(':').map(word => word.trim())
+                    toast(<div><h3>{senderFormatted}</h3>{contentFormatted}</div>, {
+                        theme: localStorage.getItem('theme')?.toLowerCase() as Theme || 'light'
+                    });
                 }
-                updateChatList(room, payload)
             });
         };
 
@@ -117,25 +150,33 @@ const Messenger = () => {
             }
         };
 
-    }, [chats, currentChat]);
+    }, [chats, currentIndex]);
 
     useEffect(() => {
-        console.log("rerender messages")
         if (messages?.length) {
             const scrollDiv = document.getElementById("current-dialog") as HTMLElement
             scrollDiv.scrollTo(0, scrollDiv.scrollHeight)
         }
     }, [messages]);
 
+    useEffect(() => {
+        (async () => {
+            if (currentIndex || currentIndex === 0) {
+                const response = await getChat(chats[currentIndex as number]?.id)
+                setMessages(response)
+            }
+        })()
+    }, [currentIndex]);
+
     const sendMessageSocket = (content: string, room: number) => {
         if (socketRef.current) {
-            socketRef.current.emit("sendMessage", content, room, userData.id);
+            socketRef.current.emit("sendMessage", content, room, userData.username);
         }
     };
 
-    const addMessageFront = (sender: number, content: string) => {
+    const addMessageFront = (sender: string, content: string) => {
         setMessages([...messages, { sender: sender, content: content, timestamp: Math.floor(Date.now() / 1000) }])
-        updateChatList(chats[currentChat as number]?.id, [content, sender])
+        updateChatList(chats[currentIndex as number]?.id, [content, sender, Math.floor(Date.now() / 1000)])
     }
 
     return (
@@ -153,17 +194,16 @@ const Messenger = () => {
                                 name={chat.companion}
                                 getChats={getChats}
                                 formattedMessage={chat.formattedMessage}
+                                time={chat.timeLastMessage}
                                 id={index}
-                                idBack={chats[index]?.id}
-                                setMessages={setMessages}
                                 setCurrentChat={setCurrentChat} />
                         ))}
                     </div>
                 </div>
                 <MainChat addMessageFront={addMessageFront}
                     messages={messages}
-                    idBack={chats[currentChat as number]?.id}
-                    userId={currentChat as number}
+                    idBack={chats[currentIndex as number]?.id}
+                    userId={currentIndex as number}
                     sendMessageSocket={sendMessageSocket} />
             </div>
         </div>
