@@ -20,6 +20,9 @@ interface IFormatMessage {
     (lastMessage: ILastMessage | undefined): [string, number | undefined]
 }
 
+//  TODO возможно добавить уведомления во всем приложении
+//       начать работу над группами
+
 const Messenger = () => {
 
     const socketRef = useRef<Socket | null>(null);
