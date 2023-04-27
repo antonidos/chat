@@ -30,18 +30,18 @@ const MainChat: FC<MainChatProps> = (props) => {
             currentDate.getMonth() !== previousDate.getMonth() ||
             currentDate.getFullYear() !== previousDate.getFullYear();
     };
-    
+
     useEffect(() => {
         const daySeparators = document.getElementsByClassName("day-separator") as HTMLCollectionOf<HTMLElement>;
-        const handleScroll = () => {            
+        const handleScroll = () => {
             for (let i = 0; i < daySeparators.length; i++) {
                 const separator = daySeparators[i] as HTMLElement;
-                const previousSeparator = daySeparators[i-1] as HTMLElement;
+                const previousSeparator = daySeparators[i - 1] as HTMLElement;
                 if (separator.getBoundingClientRect().top > 160 && previousSeparator) {
                     previousSeparator.style.position = 'sticky'
                     previousSeparator.style.top = '0'
                 } else {
-                    if(previousSeparator) previousSeparator.style.position = 'relative'
+                    if (previousSeparator) previousSeparator.style.position = 'relative'
                     separator.style.position = 'sticky'
                     separator.style.top = '0'
                 }
@@ -106,34 +106,47 @@ const MainChat: FC<MainChatProps> = (props) => {
                             return (
                                 <React.Fragment key={index}>
                                     {isNewDayMessage && (
-                                        <div className="day-separator">
+                                        <div className="day-separator bg-slate-800 px-2 py-1 rounded-xl">
                                             {isToday || isYesterday || date.toLocaleDateString().slice(0, 2) + ` ${getMonthName(date)}`}
                                         </div>
                                     )}
                                     {String(message.sender) === String(username) ? (
-                                        <div
-                                            className="message flex self-end p-1 my-1 mr-3 rounded-md align-middle 
-                                                border-2 border-border break-words dark:border-slate-700 max-w-fi"
-                                        >
-                                            <p className="break-words body-message">{message.content}</p>
-                                            <p className="time pt-1 w-14 text-right text-sm">
-                                                {String(
-                                                    date.toLocaleTimeString()
-                                                ).slice(0, 5)}
-                                            </p>
+                                        <div className="message flex self-end mr-1">
+                                            <div
+                                                className="flex p-1 my-1 mr-3 rounded-md align-middle 
+                                                    border-2 border-border break-words dark:border-slate-700 self-center"
+                                            >
+                                                <p className="break-words body-message">{message.content}</p>
+                                                <p className="time pt-1 w-14 text-right text-sm self-end">
+                                                    {String(
+                                                        date.toLocaleTimeString()
+                                                    ).slice(0, 5)}
+                                                </p>
+                                            </div>
+                                            <div className="rounded-full w-12 h-12 bg-white mr-2 my-2 self-end">
+
+                                            </div>
                                         </div>
+
+
                                     ) : (
-                                        <div
-                                            className="message flex self-start p-1 my-1 ml-3 rounded-md align-middle 
-                                                border-2 border-border break-words dark:border-slate-700"
-                                        >
-                                            <p className="break-words body-message">{message.content}</p>
-                                            <p className="time pt-1 w-14 text-right text-sm align-middle">
-                                                {String(
-                                                    new Date(message.timestamp * 1000).toLocaleTimeString()
-                                                ).slice(0, 5)}
-                                            </p>
+                                        <div className="message flex self-start ml-1">
+                                            <div className="rounded-full w-12 h-12 bg-white mr-2 my-2 self-end">
+
+                                            </div>
+                                            <div
+                                                className="flex p-1 my-1 rounded-md align-middle 
+                                                border-2 border-border break-words dark:border-slate-700 self-center"
+                                            >
+                                                <p className="break-words body-message">{message.content}</p>
+                                                <p className="time pt-1 w-14 text-right text-sm self-end">
+                                                    {String(
+                                                        new Date(message.timestamp * 1000).toLocaleTimeString()
+                                                    ).slice(0, 5)}
+                                                </p>
+                                            </div>
                                         </div>
+
                                     )}
                                 </React.Fragment>
                             );

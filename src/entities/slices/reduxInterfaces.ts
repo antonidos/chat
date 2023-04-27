@@ -6,10 +6,16 @@ export interface IPersonalInfo {
     id: number | null
 }
 
+export interface ISmallAvatar {
+    src: string,
+    username: string
+}
+
 export interface IChat {
     companion: string;
     formattedMessage: string;
     id: number,
+    avatar: ISmallAvatar | undefined,
     timeLastMessage: number | undefined
 }[]
 

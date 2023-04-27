@@ -1,11 +1,19 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setPersonalInfo } from '../slices/user/userSlice';
-import { getUserInfo, updateUserInfo } from './api/personalDataApi';
+import { deleteAvatar, getAvatar, getUserInfo, saveAvatar, updateUserInfo } from './api/personalDataApi';
 import { useRouter } from 'next/router';
+
+export interface IAvatar {
+    file_name: string,
+    guid: string,
+    src: string,
+    user_id: number
+}
 
 const PersonalInfo = () => {
     const user = useSelector(selectUser).personalInfo;
+    const [avatar, setAvatar] = useState<IAvatar | null>()
     const dispatch = useDispatch()
     const router = useRouter()
 
@@ -15,18 +23,53 @@ const PersonalInfo = () => {
         phone: ""
     })
 
+    const getAvatarOfUser = async () => {
+        const token = localStorage.getItem('userToken')
+        if (token) {
+            const result = await getAvatar(token)
+            setAvatar(result)
+            console.log(result)
+        }
+    }
+
+    const [file, setFile] = useState<File | null>(null);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setFile(event.target.files[0]);
+        }
+    };
+
+    const handleUpload = async () => {
+        // Здесь будет функция загрузки файла на сервер
+        const token = localStorage.getItem('userToken')
+        if (token && file) {
+            await saveAvatar(token, file)
+            getAvatarOfUser()
+        }
+    };
+
+    const deleteAvatarOfUser = async () => {
+        // Здесь будет функция загрузки файла на сервер
+        const token = localStorage.getItem('userToken')
+        if (token) {
+            await deleteAvatar(token)
+            getAvatarOfUser()
+        }
+    };
+
     const handleChange = ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
         setState({ ...state, [name]: value })
     }
 
     const handleSubmit = async () => {
         const disabled = !(state.age || state.email || state.phone);
-        if(!disabled) {
+        if (!disabled) {
             const age = Number(state.age) || Number(user?.age)
             const email = state.email || user?.email || null;
             const phone = state.phone || user?.phone || null;
             const response = await updateUserInfo(age, email, phone, localStorage.getItem('userToken'))
-            if(response) dispatch(setPersonalInfo(await getUserInfo(localStorage.getItem('userToken') as string)))
+            if (response) dispatch(setPersonalInfo(await getUserInfo(localStorage.getItem('userToken') as string)))
 
             handleOpenModal()
         } else alert("Измените хотя бы одно значение")
@@ -38,6 +81,14 @@ const PersonalInfo = () => {
         modal[0]?.classList.toggle('open')
         background[0]?.classList.toggle('open')
     }
+
+    useEffect(() => {
+        getAvatarOfUser()
+    }, [])
+
+    useEffect(() => {
+        handleUpload()
+    }, [file])
 
     // useEffect(() => {
     //     async function getData() {
@@ -59,13 +110,13 @@ const PersonalInfo = () => {
                 rounded-2xl border-1 items-center py-8 px-5 dark:bg-slate-700 dark:text-orange-200'>
                 <h3 className='mb-2.5'>Редактирование персональных данных</h3>
                 <p className='self-start'>E-mail</p>
-                <input name='email' onChange={handleChange} type="text" 
+                <input name='email' onChange={handleChange} type="text"
                     className="inputlogin w-full mb-2 border-2 border-border dark:bg-slate-500 dark:border-slate-900" />
                 <p className='self-start'>Возраст</p>
-                <input name='age' onChange={handleChange} type="number" 
+                <input name='age' onChange={handleChange} type="number"
                     className="inputlogin w-full mb-2 border-2 border-border dark:bg-slate-500 dark:border-slate-900" />
                 <p className='self-start'>Номер телефона</p>
-                <input name='phone' onChange={handleChange} type="number" 
+                <input name='phone' onChange={handleChange} type="number"
                     className="inputlogin w-full mb-2 border-2 border-border dark:bg-slate-500 dark:border-slate-900" />
                 <button
                     disabled={!(state.age || state.email || state.phone)}
@@ -79,8 +130,40 @@ const PersonalInfo = () => {
                 <div className="w-full box-border border-4 border-border rounded-xl mt-5 
                     bg-second p-5 dark:border-slate-700 dark:bg-slate-600 dark:text-orange-200">
                     <h1 className='text-3xl mb-3 font-bold'>Личные данные</h1>
-                    <div className="avatar mb-3">
+                    <div className="avatar mb-3 overflow-hidden flex">
+                        {avatar ? (
+                            <div key={avatar.guid}>
+                                <img alt="" src={avatar.src} style={{ maxWidth: "auto", height: "150px" }}></img>
+                            </div>
+                        ) : null}
                     </div>
+                    {avatar ?
+                        <div className='mt-4 mb-2'>
+                            <input
+                                type="file"
+                                id="file-input"
+                                onChange={handleFileChange}
+                                style={{ display: 'none' }}
+                            />
+                            <label htmlFor="file-input" className="buttonLogin bg-primary dark:bg-slate-900">
+                                Изменить аватар
+                            </label>
+                            <button onClick={deleteAvatarOfUser} className="buttonLogin bg-primary dark:bg-slate-900 ml-3">Удалить аватар</button>
+                        </div>
+                        :
+                        <div className='mt-4 mb-2'>
+                            <input
+                                type="file"
+                                id="file-input"
+                                onChange={handleFileChange}
+                                style={{ display: 'none' }}
+                            />
+                            <label htmlFor="file-input" className="buttonLogin bg-primary dark:bg-slate-900">
+                                Загрузить аватар
+                            </label>
+                        </div>
+                    }
+
                     <h3 className='mb-1'>Имя: {user?.username}</h3>
                     <h3 className='mb-1'>Электронная почта: {user?.email}</h3>
                     <h3 className='mb-1'>Возраст: {user?.age || "Не указано"}</h3>
@@ -93,7 +176,7 @@ const PersonalInfo = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

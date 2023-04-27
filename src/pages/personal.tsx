@@ -1,5 +1,5 @@
 import App from 'app/App';
-import PersonalInfo from 'entities/PersonalInfo';
+import PersonalInfo from 'entities/PersonalInfo/PersonalInfo';
 import React from 'react';
 
 const Personal = () => {

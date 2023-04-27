@@ -20,8 +20,7 @@ interface IFormatMessage {
     (lastMessage: ILastMessage | undefined): [string, number | undefined]
 }
 
-//  TODO возможно добавить уведомления во всем приложении
-//       начать работу над группами
+//  TODO начать работу над группами
 
 const Messenger = () => {
 
@@ -40,7 +39,7 @@ const Messenger = () => {
             const sender = lastMessage.sender === userData.username ? "Вы" : (lastMessage.sender || "Собеседник")
             formattedMessage = `${sender}: ${lastMessage.content}`
             if (formattedMessage.length > 40) {
-                formattedMessage = formattedMessage.slice(0, 25) + '...'
+                formattedMessage = formattedMessage.slice(0, 20) + '...'
             }
         }
         const timeLastMessage = lastMessage?.timestamp
@@ -57,9 +56,9 @@ const Messenger = () => {
                 const id = dialog.id
                 const lastMessage = response.lastMessages?.find(message => message.dialog_id === dialog.id ? message : null)
                 const [formattedMessage, timeLastMessage] = formatMessage(lastMessage)
-                
+                const avatar = response.avatars?.find(avatar => avatar.username === companion ? avatar.src : null)
                 // console.log(formattedMessage)
-                return { id, companion, formattedMessage, timeLastMessage }
+                return { id, companion, formattedMessage, timeLastMessage, avatar }
             })
             const sortedChats = sortChats(chats)
             dispatch(setChatsOfUser(sortedChats))
@@ -78,12 +77,14 @@ const Messenger = () => {
         }
         const [formattedMessage, timeLastMessage] = formatMessage(lastMessage);
         if (newMessage) {
-            companion = newMessage.companion
+            companion = newMessage.companion;
+            const avatar = newMessage.avatar;
             chatCopy.splice(chatCopy.indexOf(newMessage), 1, {
                 companion: companion,
                 id: room,
                 formattedMessage: formattedMessage,
-                timeLastMessage: timeLastMessage
+                timeLastMessage: timeLastMessage,
+                avatar: avatar
             });
         }
         const sortedChats = sortChats(chatCopy)
@@ -199,6 +200,7 @@ const Messenger = () => {
                                 formattedMessage={chat.formattedMessage}
                                 time={chat.timeLastMessage}
                                 id={index}
+                                avatar={chat.avatar}
                                 setCurrentChat={setCurrentChat} />
                         ))}
                     </div>

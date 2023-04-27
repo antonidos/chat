@@ -1,3 +1,5 @@
+import { ISmallAvatar } from "entities/slices/reduxInterfaces"
+
 export interface ILastMessage {
     dialog_id: number,
     sender: string,
@@ -11,6 +13,7 @@ interface IDialogs {
         username1: string,
         username2: string
     }[],
+    avatars: ISmallAvatar[] | undefined
     lastMessages: ILastMessage[] | undefined
 }
 
