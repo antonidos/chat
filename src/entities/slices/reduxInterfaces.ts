@@ -1,6 +1,7 @@
 export interface IPersonalInfo {
     age?: number,
     phone?: string,
+    avatar?:string,
     username: string,
     email: string,
     id: number | null

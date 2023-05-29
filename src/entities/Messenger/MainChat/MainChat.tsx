@@ -3,16 +3,21 @@ import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import { selectUser } from 'entities/slices/user/userSlice';
 import { IMessage } from '../Messenger';
 import { addMessage } from '../api/apiMessenger';
+import { ISmallAvatar } from 'entities/slices/reduxInterfaces';
+import { getAvatar } from 'entities/PersonalInfo/api/personalDataApi';
 
 interface MainChatProps {
     addMessageFront: (sender: string, content: string) => void,
     messages: IMessage[],
     idBack: number,
+    avatar: ISmallAvatar | undefined,
     userId: number,
     sendMessageSocket: (content: string, room: number) => void
 }
 
 const MainChat: FC<MainChatProps> = (props) => {
+
+    const [avatar, setAvatar] = useState('');
 
     const getMonthName = (date: Date) => {
         const monthNames = [
@@ -31,7 +36,17 @@ const MainChat: FC<MainChatProps> = (props) => {
             currentDate.getFullYear() !== previousDate.getFullYear();
     };
 
+    const getCurrentAvatar = async () => {
+        const token = localStorage.getItem('userToken')
+        if (token) {
+            const avatarchick = await getAvatar(localStorage.getItem('userToken') as string)
+            setAvatar(avatarchick.src)
+            // setAvatar()
+        }
+    }
+
     useEffect(() => {
+        getCurrentAvatar()
         const daySeparators = document.getElementsByClassName("day-separator") as HTMLCollectionOf<HTMLElement>;
         const handleScroll = () => {
             for (let i = 0; i < daySeparators.length; i++) {
@@ -106,7 +121,7 @@ const MainChat: FC<MainChatProps> = (props) => {
                             return (
                                 <React.Fragment key={index}>
                                     {isNewDayMessage && (
-                                        <div className="day-separator bg-slate-800 px-2 py-1 rounded-xl">
+                                        <div className="day-separator bg-border dark:bg-slate-800 px-2 py-1 rounded-xl">
                                             {isToday || isYesterday || date.toLocaleDateString().slice(0, 2) + ` ${getMonthName(date)}`}
                                         </div>
                                     )}
@@ -123,16 +138,16 @@ const MainChat: FC<MainChatProps> = (props) => {
                                                     ).slice(0, 5)}
                                                 </p>
                                             </div>
-                                            <div className="rounded-full w-12 h-12 bg-white mr-2 my-2 self-end">
-
+                                            <div className="rounded-full w-12 h-12 bg-white mr-2 my-2 self-end overflow-hidden">
+                                            {avatar ? <img src={avatar} alt="" /> : null}
                                             </div>
                                         </div>
 
 
                                     ) : (
                                         <div className="message flex self-start ml-1">
-                                            <div className="rounded-full w-12 h-12 bg-white mr-2 my-2 self-end">
-
+                                            <div className="rounded-full w-12 h-12 bg-white mr-2 my-2 self-end overflow-hidden">
+                                                {props.avatar ? <img src={props.avatar.src} alt="" /> : null}
                                             </div>
                                             <div
                                                 className="flex p-1 my-1 rounded-md align-middle 

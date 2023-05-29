@@ -207,6 +207,7 @@ const Messenger = () => {
                 </div>
                 <MainChat addMessageFront={addMessageFront}
                     messages={messages}
+                    avatar={chats[currentIndex as number]?.avatar}
                     idBack={chats[currentIndex as number]?.id}
                     userId={currentIndex as number}
                     sendMessageSocket={sendMessageSocket} />
