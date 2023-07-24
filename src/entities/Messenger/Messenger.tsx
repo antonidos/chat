@@ -20,8 +20,6 @@ interface IFormatMessage {
     (lastMessage: ILastMessage | undefined): [string, number | undefined]
 }
 
-//  TODO начать работу над группами
-
 const Messenger = () => {
 
     const socketRef = useRef<Socket | null>(null);
